@@ -5,7 +5,7 @@ An Invoice creator project built with React. Add itemized items, configure quant
 ### Screenshots
 <!-- <img src="https://kommodo.ai/i/WO5s2iyK0mnBYsBC4aKA" style="max-width: 100px; width: 100%; height: auto;"> -->
 
-![alt text](<Screenshot from 2026-04-30 02-55-49.png>)
+![alt text](<Screenshot.png>)
 
 ### Installation
 
