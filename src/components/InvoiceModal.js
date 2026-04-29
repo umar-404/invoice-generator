@@ -30,40 +30,59 @@ class InvoiceModal extends React.Component {
   render() {
     return(
       <div>
-        <Modal show={this.props.showModal} onHide={this.props.closeModal} size="lg" centered>
+        <Modal show={this.props.showModal} onHide={this.props.closeModal} size="lg" centered className="invoice-modal">
           <div id="invoiceCapture">
-            <div className="d-flex flex-row justify-content-between align-items-start bg-light w-100 p-4">
-              <div className="w-100">
-                <h4 className="fw-bold my-2">{this.props.info.billFrom||'John Uberbacher'}</h4>
-                <h6 className="fw-bold text-secondary mb-1">
-                  Invoice #: {this.props.info.invoiceNumber||''}
-                </h6>
+            {/* Invoice Header */}
+            <div className="invoice-preview">
+              <div className="invoice-header-section">
+                <div className="invoice-brand">
+                  <h2 className="fw-bold mb-0">{this.props.info.billFrom||'Umar Akram'}</h2>
+                  <span className="invoice-tag">INVOICE</span>
+                </div>
+                <div className="invoice-meta">
+                  <div className="meta-item">
+                    <span className="meta-label">Invoice Number</span>
+                    <span className="meta-value">{this.props.info.invoiceNumber||''}</span>
+                  </div>
+                  <div className="meta-item">
+                    <span className="meta-label">Date</span>
+                    <span className="meta-value">{this.props.info.dateOfIssue||''}</span>
+                  </div>
+                  <div className="meta-item total-due">
+                    <span className="meta-label">Amount Due</span>
+                    <span className="meta-value fw-bold">{this.props.currency} {this.props.total}</span>
+                  </div>
+                </div>
               </div>
-              <div className="text-end ms-4">
-                <h6 className="fw-bold mt-1 mb-2">Amount&nbsp;Due:</h6>
-                <h5 className="fw-bold text-secondary"> {this.props.currency} {this.props.total}</h5>
-              </div>
-            </div>
-            <div className="p-4">
-              <Row className="mb-4">
+
+              {/* Billing Info */}
+              <Row className="billing-section">
                 <Col md={4}>
-                  <div className="fw-bold">Billed to:</div>
-                  <div>{this.props.info.billTo||''}</div>
-                  <div>{this.props.info.billToAddress||''}</div>
-                  <div>{this.props.info.billToEmail||''}</div>
+                  <div className="billing-box">
+                    <span className="billing-label">Billed To</span>
+                    <div className="billing-detail">{this.props.info.billTo||''}</div>
+                    <div className="billing-detail">{this.props.info.billToAddress||''}</div>
+                    <div className="billing-detail email">{this.props.info.billToEmail||''}</div>
+                  </div>
                 </Col>
                 <Col md={4}>
-                  <div className="fw-bold">Billed From:</div>
-                  <div>{this.props.info.billFrom||''}</div>
-                  <div>{this.props.info.billFromAddress||''}</div>
-                  <div>{this.props.info.billFromEmail||''}</div>
+                  <div className="billing-box">
+                    <span className="billing-label">Billed From</span>
+                    <div className="billing-detail">{this.props.info.billFrom||''}</div>
+                    <div className="billing-detail">{this.props.info.billFromAddress||''}</div>
+                    <div className="billing-detail email">{this.props.info.billFromEmail||''}</div>
+                  </div>
                 </Col>
                 <Col md={4}>
-                  <div className="fw-bold mt-2">Date Of Issue:</div>
-                  <div>{this.props.info.dateOfIssue||''}</div>
+                  <div className="billing-box">
+                    <span className="billing-label">Date Of Issue</span>
+                    <div className="billing-detail">{this.props.info.dateOfIssue||''}</div>
+                  </div>
                 </Col>
               </Row>
-              <Table className="mb-0">
+
+              {/* Items Table */}
+              <Table className="invoice-table">
                 <thead>
                   <tr>
                     <th>QTY</th>
@@ -80,71 +99,80 @@ class InvoiceModal extends React.Component {
                           {item.quantity}
                         </td>
                         <td>
-                          {item.name} - {item.description}
+                          {item.name} {item.description ? `- ${item.description}` : ''}
                         </td>
                         <td className="text-end" style={{width: '100px'}}>{this.props.currency} {item.price}</td>
-                        <td className="text-end" style={{width: '100px'}}>{this.props.currency} {item.price * item.quantity}</td>
+                        <td className="text-end" style={{width: '100px'}}>{this.props.currency} {(item.price * item.quantity).toFixed(2)}</td>
                       </tr>
                     );
                   })}
                 </tbody>
               </Table>
-              <Table>
-                <tbody>
-                  <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <tr className="text-end">
-                    <td></td>
-                    <td className="fw-bold" style={{width: '100px'}}>SUBTOTAL</td>
-                    <td className="text-end" style={{width: '100px'}}>{this.props.currency} {this.props.subTotal}</td>
-                  </tr>
-                  {this.props.taxAmmount !== 0.00 &&
-                    <tr className="text-end">
+
+              {/* Totals Section */}
+              <div className="totals-section">
+                <Table className="totals-table">
+                  <tbody>
+                    <tr>
                       <td></td>
-                      <td className="fw-bold" style={{width: '100px'}}>TAX</td>
-                      <td className="text-end" style={{width: '100px'}}>{this.props.currency} {this.props.taxAmmount}</td>
-                    </tr>
-                  }
-                  {this.props.discountAmmount !== 0.00 &&
-                    <tr className="text-end">
                       <td></td>
-                      <td className="fw-bold" style={{width: '100px'}}>DISCOUNT</td>
-                      <td className="text-end" style={{width: '100px'}}>{this.props.currency} {this.props.discountAmmount}</td>
+                      <td></td>
                     </tr>
-                  }
-                  <tr className="text-end">
-                    <td></td>
-                    <td className="fw-bold" style={{width: '100px'}}>TOTAL</td>
-                    <td className="text-end" style={{width: '100px'}}>{this.props.currency} {this.props.total}</td>
-                  </tr>
-                </tbody>
-              </Table>
+                    <tr className="subtotal-row">
+                      <td></td>
+                      <td className="fw-bold text-end">SUBTOTAL</td>
+                      <td className="text-end">{this.props.currency} {this.props.subTotal}</td>
+                    </tr>
+                    {this.props.taxAmmount !== 0.00 &&
+                      <tr className="tax-row">
+                        <td></td>
+                        <td className="fw-bold text-end">TAX</td>
+                        <td className="text-end">{this.props.currency} {this.props.taxAmmount}</td>
+                      </tr>
+                    }
+                    {this.props.discountAmmount !== 0.00 &&
+                      <tr className="discount-row">
+                        <td></td>
+                        <td className="fw-bold text-end">DISCOUNT</td>
+                        <td className="text-end">-{this.props.currency} {this.props.discountAmmount}</td>
+                      </tr>
+                    }
+                    <tr className="total-row">
+                      <td></td>
+                      <td className="fw-bold text-end">TOTAL</td>
+                      <td className="text-end fw-bold">{this.props.currency} {this.props.total}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
+
+              {/* Notes */}
               {this.props.info.notes &&
-                <div className="bg-light py-3 px-4 rounded">
-                  {this.props.info.notes}
+                <div className="notes-section">
+                  <span className="notes-label">Notes</span>
+                  <p className="notes-text">{this.props.info.notes}</p>
                 </div>}
             </div>
           </div>
-          <div className="pb-4 px-4">
+
+          {/* Action Buttons */}
+          <div className="modal-actions">
             <Row>
               <Col md={6}>
-                <Button variant="primary" className="d-block w-100" onClick={GenerateInvoice}>
-                  <BiPaperPlane style={{width: '15px', height: '15px', marginTop: '-3px'}} className="me-2"/>Send Invoice
+                <Button variant="primary" className="action-btn send-btn" onClick={GenerateInvoice}>
+                  <BiPaperPlane className="me-2"/>
+                  Send Invoice
                 </Button>
               </Col>
               <Col md={6}>
-                <Button variant="outline-primary" className="d-block w-100 mt-3 mt-md-0" onClick={GenerateInvoice}>
-                  <BiCloudDownload style={{width: '16px', height: '16px', marginTop: '-3px'}} className="me-2"/>
+                <Button variant="outline-primary" className="action-btn download-btn" onClick={GenerateInvoice}>
+                  <BiCloudDownload className="me-2"/>
                   Download Copy
                 </Button>
               </Col>
             </Row>
           </div>
         </Modal>
-        <hr className="mt-4 mb-3"/>
       </div>
     )
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import { BiTrash } from "react-icons/bi";
+import { BiTrash, BiPlus } from "react-icons/bi";
 import EditableField from './EditableField';
 
 class InvoiceItem extends React.Component {
@@ -16,21 +16,24 @@ class InvoiceItem extends React.Component {
       )
     });
     return (
-      <div>
-        <Table>
+      <div className="items-container">
+        <Table className="items-table">
           <thead>
             <tr>
-              <th>ITEM</th>
-              <th>QTY</th>
-              <th>PRICE/RATE</th>
-              <th className="text-center">ACTION</th>
+              <th className="item-col">ITEM</th>
+              <th className="qty-col">QTY</th>
+              <th className="price-col">PRICE/RATE</th>
+              <th className="action-col">ACTION</th>
             </tr>
           </thead>
           <tbody>
             {itemTable}
           </tbody>
         </Table>
-        <Button className="fw-bold" onClick={this.props.onRowAdd}>Add Item</Button>
+        <Button className="add-item-btn mt-3" onClick={this.props.onRowAdd}>
+          <BiPlus className="me-2" style={{width: '18px', height: '18px'}}/>
+          Add Item
+        </Button>
       </div>
     );
 
@@ -43,28 +46,32 @@ class ItemRow extends React.Component {
   }
   render() {
     return (
-      <tr>
-        <td style={{width: '100%'}}>
-          <EditableField
-            onItemizedItemEdit={this.props.onItemizedItemEdit}
-            cellData={{
-            type: "text",
-            name: "name",
-            placeholder: "Item name",
-            value: this.props.item.name,
-            id: this.props.item.id,
-          }}/>
-          <EditableField
-            onItemizedItemEdit={this.props.onItemizedItemEdit}
-            cellData={{
-            type: "text",
-            name: "description",
-            placeholder: "Item description",
-            value: this.props.item.description,
-            id: this.props.item.id
-          }}/>
+      <tr className="item-row">
+        <td className="item-cell">
+          <div className="item-name-wrapper">
+            <EditableField
+              onItemizedItemEdit={this.props.onItemizedItemEdit}
+              cellData={{
+              type: "text",
+              name: "name",
+              placeholder: "Item name",
+              value: this.props.item.name,
+              id: this.props.item.id,
+            }}/>
+          </div>
+          <div className="item-desc-wrapper">
+            <EditableField
+              onItemizedItemEdit={this.props.onItemizedItemEdit}
+              cellData={{
+              type: "text",
+              name: "description",
+              placeholder: "Item description",
+              value: this.props.item.description,
+              id: this.props.item.id
+            }}/>
+          </div>
         </td>
-        <td style={{minWidth: '70px'}}>
+        <td className="qty-cell">
           <EditableField
           onItemizedItemEdit={this.props.onItemizedItemEdit}
           cellData={{
@@ -76,7 +83,7 @@ class ItemRow extends React.Component {
             id: this.props.item.id,
           }}/>
         </td>
-        <td style={{minWidth: '130px'}}>
+        <td className="price-cell">
           <EditableField
             onItemizedItemEdit={this.props.onItemizedItemEdit}
             cellData={{
@@ -91,8 +98,10 @@ class ItemRow extends React.Component {
             id: this.props.item.id,
           }}/>
         </td>
-        <td className="text-center" style={{minWidth: '50px'}}>
-          <BiTrash onClick={this.onDelEvent.bind(this)} style={{height: '33px', width: '33px', padding: '7.5px'}} className="text-white mt-1 btn btn-danger"/>
+        <td className="action-cell">
+          <button onClick={this.onDelEvent.bind(this)} className="delete-btn" type="button">
+            <BiTrash style={{width: '18px', height: '18px'}}/>
+          </button>
         </td>
       </tr>
     );

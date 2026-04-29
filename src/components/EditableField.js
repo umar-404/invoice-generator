@@ -6,14 +6,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 class EditableField extends React.Component {
   render() {
     return (
-      <InputGroup className="my-1 flex-nowrap">
+      <InputGroup className="editable-field">
         {
           this.props.cellData.leading != null &&
-          <InputGroup.Text
-            className="bg-light fw-bold border-0 text-secondary px-2">
-            <span className="border border-2 border-secondary rounded-circle d-flex align-items-center justify-content-center small" style={{width: '20px', height: '20px'}}>
-              {this.props.cellData.leading}
-            </span>
+          <InputGroup.Text className="leading-currency">
+            {this.props.cellData.leading}
           </InputGroup.Text>
         }
         <Form.Control
